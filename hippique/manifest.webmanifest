@@ -1,0 +1,20 @@
+{
+  "name": "HIPPIQUE SYSTÈME PRO",
+  "short_name": "HIPPIQUE PRO",
+  "description": "Bulletin hippique numérique pour préparer les réunions, courses, bases, champs réduits et combinés",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eaf0f3",
+  "theme_color": "#14375a",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
