@@ -1,15 +1,16 @@
 {
   "name": "AMIGO SYSTÈME PRO",
   "short_name": "AMIGO PRO",
-  "description": "Bulletin et systèmes Amigo interactifs",
-  "start_url": "./",
+  "description": "Bulletin numérique Amigo, bases fixes, systèmes complets et réduits, saisie guidée",
+  "lang": "fr",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#edf1f8",
-  "theme_color": "#10234e",
+  "background_color": "#f6f2f3",
+  "theme_color": "#97142b",
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
