@@ -1,39 +1,256 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#10234e"><title>AMIGO SYSTÈME PRO</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="icon.svg"><meta name="apple-mobile-web-app-capable" content="yes">
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AMIGO SYSTÈME PRO — Mobile</title><meta name="theme-color" content="#97142b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Bulletin Amigo interactif, bases fixes de 1 à 7 numéros et générateur de grilles, hors connexion.">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+
 <style>
-:root{font-family:system-ui,Arial;background:#edf1f8;color:#172647}*{box-sizing:border-box}body{margin:0}.wrap{max-width:800px;margin:auto;padding:16px}header{background:#10234e;color:white;padding:18px 16px}header strong{font-size:1.35rem}header small{display:block;color:#c8d6ff;margin-top:4px}section{background:white;padding:16px;border-radius:15px;margin:14px 0;box-shadow:0 3px 14px #14254a12}h2{font-size:1.06rem;margin:0 0 10px}.sub{color:#52617b;font-size:.88rem}.nums{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.num{min-width:0;aspect-ratio:1;position:relative;border:2px solid #c4cedf;background:#fff;border-radius:8px;font-weight:800;font-size:1rem;color:#152d5c}.num.selected{background:#b51f32;color:white;border-color:#b51f32}.num.selected:after{content:"×";position:absolute;font-size:21px;right:2px;top:-6px;color:#fff}.num.base{background:#0e6a51;border-color:#0e6a51;color:white}.num.base:after{content:"★";position:absolute;font-size:13px;right:1px;top:0;color:#fff}label{font-weight:650}select,input{width:100%;font:inherit;padding:11px;border:1px solid #b8c4d9;border-radius:9px;margin:6px 0 10px}.actions{display:flex;flex-wrap:wrap;gap:8px}button.action{border:0;border-radius:9px;background:#183d88;color:#fff;padding:12px 15px;font-weight:700}.action.alt{background:#e6eafa;color:#173165}.action.danger{background:#8b2237}.stats{padding:12px;border-radius:9px;background:#edf3ff;margin:10px 0;font-size:.93rem}.grille{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #dce3f0;flex-wrap:wrap}.ball{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#153f8e;color:white;font-weight:750}.ball.fixed{background:#0d7356}.grille small{color:#65758c;width:39px}.hint{font-size:.83rem;color:#586780;line-height:1.5}#grilles{max-height:440px;overflow:auto}.hidden{display:none}footer{text-align:center;font-size:.78rem;color:#63718b;padding:14px}</style></head>
-<body><header><div class="wrap"><strong>✦ AMIGO SYSTÈME PRO</strong><small>Bulletin interactif et systèmes de combinaisons — version mobile</small></div></header>
-<main class="wrap">
-<section><h2>1. Choisis tes numéros (1 à 28)</h2><div class="sub">Touche les cases pour mettre ou enlever une croix rouge.</div><div id="nums" class="nums" aria-label="Numéros Amigo"></div><div class="stats" id="selectionInfo"></div><div class="actions"><button class="action alt" id="clear">Tout effacer</button><button class="action alt" id="sample">Exemple 10 numéros</button></div></section>
-<section><h2>2. Définis tes bases</h2><label for="baseCount">Nombre de bases fixes (1 à 7)</label><select id="baseCount"><option value="0">0 — aucune base</option><option value="1">1 base</option><option value="2">2 bases</option><option value="3">3 bases</option><option value="4">4 bases</option><option value="5">5 bases</option><option value="6">6 bases</option><option value="7">7 bases</option></select><p class="hint">Après avoir choisi le nombre de bases, touche les numéros sélectionnés pour les marquer en vert ★. Les bases seront présentes sur toutes les grilles produites.</p><div id="baseInfo" class="stats"></div></section>
-<section><h2>3. Développer le système</h2><p class="hint">Chaque grille comporte exactement 7 numéros. Le logiciel crée toutes les combinaisons possibles des numéros sélectionnés en conservant les bases.</p><div id="estimate" class="stats"></div><div class="actions"><button class="action" id="generate">Développer les grilles</button><button class="action alt" id="export" disabled>Exporter CSV</button></div><p id="message" role="status" class="hint"></p><div id="grilles"></div></section>
-<section><h2>4. Mode d'emploi</h2><p class="hint">Sélectionne au moins 7 numéros, définis éventuellement 1 à 7 bases, puis appuie sur « Développer les grilles ». La sélection reste mémorisée sur ce téléphone. Ce logiciel prépare des combinaisons : il ne transmet aucun pari à la FDJ, ne garantit aucun gain et n'est pas affilié à la FDJ.</p></section>
-<footer>Outil indépendant · Réservé aux adultes · Jouez avec modération</footer>
+:root{--red:#b5152b;--red2:#780d20;--bg:#f4f1f0;--ink:#211b22;--blue:#1b65bd;--yellow:#f5bf38}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}header{background:linear-gradient(120deg,#660d21,#c61d39);color:#fff;padding:17px max(16px,calc((100vw - 1120px)/2));box-shadow:0 2px 12px #0002}header h1{margin:0;font-size:clamp(22px,3vw,32px);letter-spacing:.02em}header p{margin:5px 0 0;color:#ffe4e9;font-size:13px}main{max-width:1120px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:minmax(300px,1fr) minmax(300px,.93fr);gap:16px}.panel{background:white;border:1px solid #e0d7d9;border-radius:14px;padding:17px;box-shadow:0 3px 12px #2a07100b}.panel h2{font-size:19px;margin:0 0 12px}.small{font-size:13px;color:#5d555a}.bulletin{background:linear-gradient(160deg,#ce243a,#8f132a);color:#fff;border:6px solid white;outline:1px solid #e6c3c8;border-radius:12px;padding:16px;box-shadow:0 5px 14px #23040d1c;max-width:460px;margin:auto}.bulletin h3{text-align:center;margin:0 0 8px;font-size:24px;letter-spacing:.08em}.bulletin .sub{text-align:center;font-size:13px;margin-bottom:12px}.nums{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.num{border:2px solid #ffe0e4;background:#fff;color:#8e0d29;border-radius:5px;position:relative;aspect-ratio:1;min-width:0;font-size:clamp(12px,2vw,17px);font-weight:850;cursor:pointer;display:flex;justify-content:center;align-items:center;touch-action:manipulation}.num:hover{border-color:#ffbe4d}.num:focus-visible{outline:3px solid #ffd34b;outline-offset:2px}.num.sel{background:#b00025;color:#fff;border-color:white}.num.sel:after{content:'×';font-size:clamp(21px,3.7vw,36px);position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);color:white;font-weight:900;line-height:1;text-shadow:0 0 2px #7c0716}.num.sel span{position:absolute;top:1px;left:3px;z-index:1;font-size:11px;color:#fff}.num.sel span:after{content:''}.selected{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px;font-weight:700}.count{background:#ffffff2b;padding:6px 9px;border-radius:9px}.range{font-size:12px;color:#ffe3e6}.line{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}.line label{font-size:13px;font-weight:650}.pill{border:1px solid #e1cbd1;background:#fff;padding:8px 12px;cursor:pointer;border-radius:9px;color:#522230;font-weight:750}.pill.active{background:var(--red);border-color:var(--red);color:white}.btn{background:#8f1029;color:white;border:0;border-radius:10px;padding:11px 14px;font-weight:750;cursor:pointer;min-height:43px}.btn.alt{background:#29202a}.btn.light{background:#eee8eb;color:#321d25}.btn:disabled{opacity:.45;cursor:not-allowed}button{font-family:inherit}.controls{display:flex;gap:9px;flex-wrap:wrap}select,input[type=number]{border:1px solid #d3c6cc;border-radius:9px;padding:8px 10px;background:#fff;font-size:15px;max-width:100%}.field{display:flex;flex-direction:column;gap:6px;min-width:100px;flex:1}.fields{display:flex;gap:10px;flex-wrap:wrap}.measure{background:#faf6f7;border:1px solid #eee0e4;padding:10px 13px;border-radius:10px;margin:10px 0;font-size:14px}.status{font-size:14px;padding:10px;border-radius:9px;background:#f4edf0;margin-top:12px}.status.err{background:#ffeded;color:#8f0920}.status.ok{background:#e7f7ee;color:#135c31}.listbox{margin-top:10px;max-height:390px;overflow:auto;border:1px solid #eadfe1;border-radius:10px}.gridline{display:flex;gap:10px;align-items:center;padding:9px 11px;border-bottom:1px solid #eee8ea;font-variant-numeric:tabular-nums;font-size:14px}.gridline:last-child{border:0}.gridline strong{min-width:55px;color:#7e1b30}.tokens{display:flex;flex-wrap:wrap;gap:4px}.tok{border-radius:50%;width:28px;height:28px;background:#fae9ed;color:#8c1128;display:inline-flex;align-items:center;justify-content:center;font-weight:850;font-size:13px}.gridline .tok{background:#f1edf0}.footer{grid-column:1/-1;color:#6d5f64;text-align:center;font-size:12px;padding:7px 0 23px}#results{grid-column:1/-1}#preview{margin:10px 0}.note{font-size:12px;color:#6d5961}.highlight{color:#94132b;font-weight:850}#chart{margin-top:12px}.titlebar{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}.badge{background:#ffe5e9;color:#90142b;padding:6px 9px;border-radius:99px;font-size:12px;font-weight:800}#win{margin-top:10px}.win-num{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.winnum{aspect-ratio:1;border:1px solid #d9cdd2;border-radius:7px;font-weight:700;background:#fff;cursor:pointer;position:relative}.winnum.blue{background:var(--blue);color:white}.winnum.yellow{background:var(--yellow);color:#251e11}.winnum.blue:after,.winnum.yellow:after{content:'✓';position:absolute;top:-4px;right:2px;font-size:10px}.baseSection{border:1px solid #e9ced5;padding:13px;border-radius:12px;background:#fff9fa}.baseNums{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.baseNum{aspect-ratio:1;border:1px solid #d5bdc5;border-radius:7px;background:#fff;font-weight:800;color:#822039;cursor:pointer;min-width:0;position:relative}.baseNum.chosen{background:#a86b12;border-color:#7c4a00;color:#fff}.baseNum.chosen:after{content:"★";position:absolute;top:0;right:2px;font-size:10px}.num.baseFixed{outline:3px solid #ffd15d;outline-offset:-3px}.baseTok{background:#ffe1a4!important;color:#674000!important;box-shadow:inset 0 0 0 2px #cc982b}.suggestions{margin-top:13px}.suggestion{font-size:12px;padding:8px 10px;min-height:36px}.twoCols{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pre{font-variant-numeric:tabular-nums}@media(max-width:800px){main{grid-template-columns:1fr}.bulletin{max-width:470px}.num{font-size:17px}.num.sel:after{font-size:34px}}@media print{header,.no-print,#winWrap,footer{display:none!important}main{display:block;margin:0}.panel{box-shadow:none;border:0}.bulletin{-webkit-print-color-adjust:exact;print-color-adjust:exact}#results{page-break-before:always}.listbox{max-height:none;overflow:visible}body{background:white}}
+
+/* Adaptation pour téléphone et interface tactile */
+:root{--safe-bottom:env(safe-area-inset-bottom,0px)}
+button,select,input{-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
+html{scroll-behavior:smooth}
+header{display:flex;align-items:center;gap:12px}
+.app-symbol{width:58px;height:58px;object-fit:cover;border-radius:16px;flex:none;box-shadow:0 2px 9px #0005}
+header .head-text{min-width:0}
+#mobile-nav{display:none}
+#mobile-empty{display:none}
+#listPager{display:none}
+#mobile-install{display:none}
+.num.sel span{top:0;left:2px}
+#selectionHint{margin-top:8px}
+#pageSizeNote{font-size:12px;color:#615860;margin:8px 0}
+@media(max-width:760px){
+ html{scroll-padding-top:10px}
+ body{padding-bottom:calc(84px + var(--safe-bottom));background:#f6f2f3}
+ header{padding:11px 13px;gap:10px;min-height:75px}
+ header h1{font-size:20px;line-height:1.12;letter-spacing:0}
+ header p{font-size:11px;line-height:1.35;margin-top:3px}
+ .app-symbol{width:52px;height:52px;border-radius:12px}
+ main{display:block;margin:0;padding:10px}
+ .panel{padding:13px 11px;border-radius:13px;box-shadow:0 2px 9px #2a07100d;margin-bottom:10px}
+ .panel h2{font-size:17px;margin-bottom:10px}
+ .titlebar h2{margin-bottom:0}
+ .badge{font-size:11px;padding:5px 8px}
+ .bulletin{padding:11px 9px 12px;border-width:3px;outline:none;width:100%;max-width:420px;border-radius:13px}
+ .bulletin h3{font-size:23px;margin-bottom:5px}
+ .bulletin .sub{font-size:11px;margin-bottom:10px}
+ .nums{gap:5px}
+ .num{font-size:16px;min-height:0;border-width:1.5px;border-radius:5px;aspect-ratio:1}
+ .num.sel:after{font-size:30px}
+ .num.sel span{font-size:10px;top:1px;left:2px}
+ .num.baseFixed{outline:2px solid #ffcc57;outline-offset:-3px}
+ .selected{margin-top:9px;font-size:13px}
+ .range{font-size:11px}
+ .small{font-size:12px;line-height:1.5}
+ .note{font-size:11px;line-height:1.45}
+ .controls{gap:7px}
+ .controls .btn{flex:1 1 auto}
+ .btn{padding:10px;font-size:13px;min-height:46px;border-radius:9px}
+ .line{margin:12px 0;gap:5px}
+ .pill{min-height:43px;flex:1 1 auto;padding:8px 11px;font-size:13px}
+ select,input[type=number]{width:100%;min-height:44px;font-size:16px}
+ .fields{gap:9px}
+ .field{min-width:135px}
+ .field label{font-size:12px}
+ .baseSection{padding:10px;border-radius:10px}
+ .baseNums{gap:4px}
+ .baseNum{min-height:0;font-size:13px;border-radius:5px}
+ .measure{padding:10px;font-size:12px;line-height:1.5}
+ .status{font-size:13px;line-height:1.5}
+ .gridline{padding:10px 6px;gap:4px;font-size:12px}
+ .gridline strong{min-width:41px;font-size:11px}
+ .tokens{gap:3px;flex-wrap:nowrap}
+ .tok{width:clamp(29px,9vw,38px);height:clamp(29px,9vw,38px);font-size:12px;flex:0 0 auto}
+ #preview .tok{width:clamp(34px,10vw,42px);height:clamp(34px,10vw,42px);font-size:14px}
+ #preview .gridline{padding-left:0;padding-right:0}
+ .listbox{max-height:410px}
+ .win-num{gap:4px}
+ .winnum{font-size:15px;min-width:0}
+ #mobile-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;position:fixed;left:0;right:0;bottom:0;z-index:99;background:#fff;border-top:1px solid #ead9de;padding:7px 7px calc(8px + var(--safe-bottom));box-shadow:0 -4px 15px #35001618;gap:4px}
+ .mobile-nav-btn{font:700 11px system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;background:transparent;border-radius:10px;color:#67545c;padding:5px 2px;min-height:50px;cursor:pointer}
+ .mobile-nav-btn .ico{font-size:20px;line-height:1.2}
+ .mobile-nav-btn.active{background:#ad1731;color:white}
+ .panel[data-mobile-section]:not(.mobile-active){display:none!important}
+ #mobile-empty.mobile-active{display:block}
+ #mobile-install{display:block}
+ #listPager{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+ #listPager .btn{min-height:41px;padding:8px}
+ #pagerInfo{font-size:12px;white-space:nowrap;font-weight:800}
+ footer.footer{display:none}
+}
+@media(max-width:355px){
+ main{padding:6px}
+ .panel{padding:10px 7px}
+ .bulletin{padding:8px 7px}
+ .nums{gap:3px}
+ .num{font-size:14px}
+ .num.sel:after{font-size:26px}
+ .num.sel span{font-size:9px}
+ .tok{width:clamp(26px,8.6vw,32px);height:clamp(26px,8.6vw,32px);font-size:11px}
+}
+@media print{#mobile-nav,#mobile-install,#listPager,#mobile-empty{display:none!important}.panel[data-mobile-section]{display:block!important}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"></head>
+<body>
+<header><img class="app-symbol" src="icon.svg" alt="Icône AMIGO SYSTÈME PRO"><div class="head-text"><h1>AMIGO SYSTÈME PRO</h1><p>Mon bulletin · bases fixes · combinaisons · saisie guidée</p></div></header>
+<main>
+<section class="panel mobile-active" data-mobile-section="bulletin">
+ <div class="titlebar"><h2>Mon bulletin numérique</h2><span class="badge">Disposition 7 × 4</span></div>
+ <div class="bulletin" id="bulletin">
+  <h3>AMIGO</h3><div class="sub">Coche tes numéros d'une croix blanche</div>
+  <div id="numbers" class="nums" role="group" aria-label="Choix des numéros de 1 à 28"></div>
+  <div class="selected"><span>Numéros cochés</span><span id="count" class="count">0 / 7</span></div>
+  <div class="range" id="range">Sélectionne au moins 7 numéros pour créer des grilles.</div>
+ </div>
+ <p class="small">Une grille jouable comporte toujours <strong>7 numéros</strong>. En sélectionnant davantage de numéros, tu constitues une base pour fabriquer plusieurs grilles de 7.</p>
+ <div class="controls no-print"><button class="btn light" id="clear">Tout décocher</button><button class="btn light" id="random">7 numéros au hasard</button><button class="btn light" id="save">Sauvegarder la sélection</button></div>
+ <h2 style="margin-top:22px">Mise et tirages</h2>
+ <div class="line" id="stakes" aria-label="Choix de la mise"></div>
+ <div class="line" id="draws" aria-label="Choix du nombre de tirages"></div>
+ <div class="measure"><span>Mise totale pour <strong id="bCount">1</strong> grille(s) : </span><strong id="cost" class="highlight">2,00 €</strong></div>
+ <div id="mobile-install" class="measure"><strong>Sur mon téléphone</strong><p style="margin:5px 0 9px" class="small">Ce fichier fonctionne sans connexion. Pour une icône d’application installable depuis Chrome, utilise la version hébergée en HTTPS.</p><button type="button" class="btn" id="installPwa" hidden>Installer l’application</button></div><p class="note">Bulletin de préparation non officiel. Il n'est pas scannable ni directement validable en point de vente FDJ.</p>
+</section>
+<section class="panel" data-mobile-section="systems">
+ <h2>Créer un système de grilles</h2>
+ <div class="fields">
+ <div class="field"><label for="mode">Type de système</label><select id="mode"><option value="full">Complet : toutes les combinaisons</option><option value="reduced">Réduit : couverture des compléments</option><option value="rotation">Complémentaire : rotation équilibrée</option></select></div>
+ <div class="field" id="maxWrap" style="display:none"><label for="max">Nombre de grilles souhaité</label><input type="number" id="max" min="1" max="500" value="20"></div>
+ </div>
+ <div class="baseSection" style="margin-top:16px">
+<div class="titlebar"><h2 style="margin:0">Bases fixes et compléments</h2><span class="badge" id="baseBadge">Sans base</span></div>
+<p class="small" style="margin:8px 0 12px">Une <strong>base fixe</strong> est un numéro présent sur <strong>toutes</strong> les grilles. Les autres cases sont remplies par les numéros complémentaires de ta sélection.</p>
+<div class="fields"><div class="field"><label for="baseCount">Nombre de bases fixes</label><select id="baseCount"><option value="0">Sans base (système classique)</option><option value="1">1 base</option><option value="2">2 bases</option><option value="3">3 bases</option><option value="4">4 bases</option><option value="5">5 bases</option><option value="6">6 bases</option><option value="7">7 bases</option></select></div></div>
+<div id="basePicker" style="display:none"><p class="small" style="margin-bottom:7px">Clique sur les numéros fixes ci-dessous (en <strong>doré</strong>). Ils sont automatiquement ajoutés à ton bulletin.</p><div id="baseNumbers" class="baseNums" role="group" aria-label="Choix des numéros fixes de 1 à 28"></div><p id="baseHint" class="small" aria-live="polite"></p></div>
+<div class="measure" id="baseSummary" aria-live="polite">7 numéros par grille, sans base fixe.</div>
+<div class="suggestions no-print"><strong>Mes systèmes complémentaires</strong><div class="controls" style="margin-top:8px"><button class="btn light suggestion" type="button" data-mode="full">Complet</button><button class="btn light suggestion" type="button" data-mode="reduced" data-size="20">Réduit · 20 grilles</button><button class="btn light suggestion" type="button" data-mode="rotation" data-size="30">Rotation · 30 grilles</button></div><p class="note" style="margin-bottom:0">Ces propositions servent à organiser les combinaisons : elles ne garantissent pas de gain. Les conditions choisies restent appliquées.</p></div>
+</div>
+<div class="fields" style="margin-top:13px">
+ <div class="field"><label for="odd">Nombre de numéros impairs</label><select id="odd"><option value="all">Sans condition</option><option value="2-5">Entre 2 et 5</option><option value="3-4">Entre 3 et 4</option><option value="3-3">Exactement 3</option><option value="4-4">Exactement 4</option></select></div>
+ <div class="field"><label for="consec">Numéros consécutifs</label><select id="consec"><option value="all">Sans condition</option><option value="0">Aucun couple consécutif</option><option value="1">Au plus 1 couple</option><option value="2">Au plus 2 couples</option></select></div>
+ </div>
+ <div class="measure">Combinaisons théoriques avec les bases fixes, avant conditions : <strong id="totalComb">—</strong><br><span class="small">Les systèmes réduits et par rotation ne garantissent aucun gain. La couverture des associations complémentaires sera mesurée après génération.</span></div>
+ <div class="controls no-print"><button id="generate" class="btn">Développer mon système</button><button id="export" class="btn alt" disabled>Exporter en CSV</button><button id="print" class="btn light" disabled>Imprimer</button></div>
+ <div id="status" class="status">Coche 7 à 15 numéros, puis choisis éventuellement des bases fixes.</div>
+ <section id="guided" style="display:none;margin-top:18px"><h2>Saisie guidée — grille par grille</h2><div class="controls no-print" style="justify-content:space-between;align-items:center"><button class="btn light" id="prev">← Précédente</button><strong id="page">1 / 1</strong><button class="btn light" id="next">Suivante →</button></div><div id="preview"></div></section>
+ </section>
+ <section class="panel" id="results" data-mobile-section="grids" style="display:none"><div class="titlebar"><h2>Développement de ton système</h2><span class="badge" id="summary">0 grilles</span></div><div class="measure" id="coverage"></div><div class="listbox" id="grids"></div><div id="listPager" class="no-print"><button type="button" class="btn light" id="listPrev">← Avant</button><span id="pagerInfo">1 / 1</span><button type="button" class="btn light" id="listNext">Après →</button></div><div class="note" id="pageSizeNote"></div></section>
+ <section class="panel" id="mobile-empty" data-mobile-section="grids"><h2>Mes grilles</h2><p class="small">Tu n’as pas encore développé de système. Coche tes numéros puis ouvre l’onglet « Systèmes » pour générer tes grilles.</p><button class="btn" type="button" id="goSystems">Créer mon système</button></section><section class="panel" id="winWrap" data-mobile-section="draw" style="grid-column:1/-1"><h2>Vérification après tirage</h2><p class="small">Clique sur les numéros du tirage : premier clic = bleu, deuxième clic = jaune, troisième clic = effacer. Saisis exactement 7 bleus et 5 jaunes pour analyser les grilles générées.</p><div class="win-num" id="win"></div><div class="controls no-print" style="margin-top:10px"><button class="btn light" id="resetWin">Effacer le tirage</button><button class="btn alt" id="checkWin">Vérifier mes grilles</button></div><div id="winResult" class="status">Aucun tirage saisi.</div></section>
+ <footer class="footer">Outil personnel indépendant — non affilié à FDJ. Jeu réservé aux majeurs. Joue avec un budget fixé à l'avance.</footer>
 </main>
+<nav id="mobile-nav" aria-label="Navigation du logiciel">
+<button type="button" class="mobile-nav-btn active" data-go="bulletin" aria-current="page"><span class="ico" aria-hidden="true">☷</span><span>Bulletin</span></button>
+<button type="button" class="mobile-nav-btn" data-go="systems"><span class="ico" aria-hidden="true">⚙</span><span>Systèmes</span></button>
+<button type="button" class="mobile-nav-btn" data-go="grids"><span class="ico" aria-hidden="true">▦</span><span>Grilles</span></button>
+<button type="button" class="mobile-nav-btn" data-go="draw"><span class="ico" aria-hidden="true">✓</span><span>Tirage</span></button>
+</nav>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-let selected=new Set(),bases=new Set(),rows=[];
-try{const saved=JSON.parse(localStorage.getItem('amigo-pro')||'{}');selected=new Set((saved.selected||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=28));bases=new Set((saved.bases||[]).filter(n=>selected.has(n)));$('baseCount').value=String(Math.min(7,Math.max(0,saved.count||0)))}catch{}
-const sorted=s=>[...s].sort((a,b)=>a-b),count=()=>+$('baseCount').value;
-function persist(){try{localStorage.setItem('amigo-pro',JSON.stringify({selected:sorted(selected),bases:sorted(bases),count:count()}))}catch{}}
-function choose(n){if(!selected.has(n)){selected.add(n)}else if(count()>0&&bases.size<count()&&!bases.has(n)){bases.add(n)}else if(bases.has(n)){bases.delete(n)}else{selected.delete(n)}rows=[];render()}
-function comb(n,k){if(k<0||k>n)return 0;let x=1;for(let i=1;i<=k;i++)x=x*(n-i+1)/i;return Math.round(x)}
-function render(){const max=count();if(bases.size>max)bases=new Set(sorted(bases).slice(0,max));const root=$('nums');root.replaceChildren();for(let n=1;n<=28;n++){const b=document.createElement('button');b.type='button';b.className='num'+(bases.has(n)?' base':selected.has(n)?' selected':'');b.textContent=n;b.setAttribute('aria-label',n+(bases.has(n)?' base':selected.has(n)?' sélectionné':''));b.setAttribute('aria-pressed',selected.has(n));b.onclick=()=>choose(n);root.appendChild(b)}
-$('selectionInfo').textContent=selected.size+' numéro(s) sélectionné(s) — '+Math.max(0,7-selected.size)+' minimum à ajouter';
-$('baseInfo').textContent=bases.size+' / '+max+' base(s) fixée(s)'+(bases.size?' : '+sorted(bases).join(', '):'');
-const possible=selected.size>=7&&bases.size===max;
-$('estimate').textContent=possible?comb(selected.size-max,7-max).toLocaleString('fr-FR')+' grille(s) possibles (développement intégral).':'Sélectionne au moins 7 numéros et exactement '+max+' base(s) pour calculer le système.';
-$('export').disabled=!rows.length;$('grilles').replaceChildren();$('message').textContent='';persist()}
-$('baseCount').onchange=()=>{bases=new Set(sorted(bases).slice(0,count()));rows=[];render()};
-$('clear').onclick=()=>{selected.clear();bases.clear();rows=[];render()};
-$('sample').onclick=()=>{selected=new Set([2,4,7,9,12,15,18,21,24,27]);bases.clear();rows=[];render()};
-$('generate').onclick=()=>{rows=[];$('grilles').replaceChildren();if(selected.size<7||bases.size!==count()){render();$('message').textContent='Il faut au moins 7 numéros et exactement '+count()+' base(s).';return}
-const fixed=sorted(bases),other=sorted(selected).filter(n=>!bases.has(n)),need=7-fixed.length,total=comb(other.length,need);
-if(total>5000){$('message').textContent='Ce système comporte '+total.toLocaleString('fr-FR')+' grilles. Limite de 5 000 grilles pour protéger le téléphone : réduis les numéros sélectionnés ou augmente les bases.';return}
-function walk(start,acc){if(acc.length===need){rows.push([...fixed,...acc].sort((a,b)=>a-b));return}for(let i=start;i<=other.length-(need-acc.length);i++)walk(i+1,[...acc,other[i]])}walk(0,[]);
-const frag=document.createDocumentFragment();rows.forEach((r,i)=>{const div=document.createElement('div');div.className='grille';const label=document.createElement('small');label.textContent='#'+(i+1);div.appendChild(label);r.forEach(n=>{const ball=document.createElement('span');ball.className='ball'+(bases.has(n)?' fixed':'');ball.textContent=n;div.appendChild(ball)});frag.appendChild(div)});$('grilles').appendChild(frag);$('export').disabled=false;$('message').textContent=rows.length+' grille(s) générée(s). Les bases sont affichées en vert.'};
-$('export').onclick=()=>{if(!rows.length)return;const csv='Grille;N1;N2;N3;N4;N5;N6;N7\n'+rows.map((r,i)=>[i+1,...r].join(';')).join('\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='amigo-systeme-pro.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};
-render();
+let selected=new Set(),baseSet=new Set(),baseCount=0,stake=2,draws=1,grids=[],step=0,drawColors=new Map();let listPage=0;const pageSize=30;
+const key='amigo-systeme-pro-v2';let state;
+try{state=JSON.parse(localStorage.getItem(key)||localStorage.getItem('amigo-systeme-pro-v1')||'null')}catch{}
+if(state){selected=new Set((state.numbers||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=28).slice(0,15));baseCount=Math.max(0,Math.min(7,Number(state.baseCount)||0));baseSet=new Set((state.bases||[]).filter(n=>selected.has(n)).slice(0,baseCount));stake=[2,4,6,8].includes(state.stake)?state.stake:2;draws=[1,2].includes(state.draws)?state.draws:1}
+function persist(){try{localStorage.setItem(key,JSON.stringify({numbers:[...selected],bases:[...baseSet],baseCount,stake,draws}))}catch{}}
+function C(n,k){if(k>n||k<0)return 0;let r=1;for(let i=1;i<=k;i++)r=r*(n-i+1)/i;return Math.round(r)}
+function countNeeded(){return 7-baseCount}
+function remaining(){return [...selected].filter(n=>!baseSet.has(n)).sort((a,b)=>a-b)}
+function invalidate(){grids=[];$('results').style.display='none';$('guided').style.display='none';$('export').disabled=true;$('print').disabled=true;$('winResult').textContent='Aucune grille à vérifier : développe ton nouveau système.'}
+function toggleSelected(n){if(selected.has(n)){selected.delete(n);baseSet.delete(n)}else if(selected.size<15)selected.add(n);else return alert('La sélection est limitée à 15 numéros. Décoche un autre numéro pour en choisir un nouveau.');invalidate();update()}
+function toggleBase(n){if(!baseCount)return;if(baseSet.has(n)){baseSet.delete(n)}else{if(baseSet.size>=baseCount){$('status').className='status err';$('status').textContent='Tu as déjà choisi '+baseCount+' base(s). Décoche une base pour en changer.';return}if(!selected.has(n)){if(selected.size>=15){$('status').className='status err';$('status').textContent='Limite de 15 numéros atteinte : décoche un autre numéro sur le bulletin.';return}selected.add(n)}baseSet.add(n)}invalidate();update()}
+function buildNums(){let box=$('numbers');box.innerHTML='';for(let n=1;n<=28;n++){let b=document.createElement('button');b.className='num'+(selected.has(n)?' sel':'')+(baseSet.has(n)?' baseFixed':'');b.type='button';b.setAttribute('aria-label','Numéro '+n+(baseSet.has(n)?', base fixe':''));b.setAttribute('aria-pressed',selected.has(n));b.innerHTML='<span>'+n+'</span>';b.onclick=()=>toggleSelected(n);box.append(b)}}
+function buildBasePicker(){let picker=$('basePicker'),wrap=$('baseNumbers');picker.style.display=baseCount?'block':'none';$('baseBadge').textContent=baseCount?baseSet.size+' / '+baseCount+' base(s)':'Sans base';if(!baseCount)return;wrap.innerHTML='';for(let n=1;n<=28;n++){let b=document.createElement('button');b.className='baseNum'+(baseSet.has(n)?' chosen':'');b.type='button';b.setAttribute('aria-pressed',baseSet.has(n));b.setAttribute('aria-label','Numéro '+n+(baseSet.has(n)?' base fixe':' non fixe'));b.textContent=n;b.onclick=()=>toggleBase(n);wrap.append(b)}$('baseHint').textContent=baseSet.size<baseCount?'Il reste '+(baseCount-baseSet.size)+' base(s) à choisir.':'Bases prêtes : '+[...baseSet].sort((a,b)=>a-b).join(' · ')}
+function opts(id,values,current,func,prefix){let wrap=$(id);wrap.innerHTML='<strong style="width:100%">'+prefix+'</strong>';values.forEach(v=>{let b=document.createElement('button');b.className='pill'+(v===current?' active':'');b.textContent=id==='stakes'?v+' €':v+' tirage'+(v>1?'s':'');b.onclick=()=>{func(v);persist();update()};wrap.append(b)})}
+function conditions(a){let odd=$('odd').value,c=$('consec').value;let count=a.filter(x=>x%2).length;if(odd!=='all'){let [mn,mx]=odd.split('-').map(Number);if(count<mn||count>mx)return false}if(c!=='all'){let pairs=0;for(let i=1;i<a.length;i++)if(a[i]===a[i-1]+1)pairs++;if(pairs>Number(c))return false}return true}
+function generateAll(complements,fixes){let arr=[],cur=[],need=7-fixes.length;function r(start){if(cur.length===need){let g=[...fixes,...cur].sort((a,b)=>a-b);if(conditions(g))arr.push(g);return}for(let i=start;i<=complements.length-(need-cur.length);i++){cur.push(complements[i]);r(i+1);cur.pop()}}r(0);return arr}
+function tupleKeys(a,t){if(t===0)return ['vide'];let res=[],cur=[];function go(start){if(cur.length===t){res.push(cur.join('-'));return}for(let i=start;i<=a.length-(t-cur.length);i++){cur.push(a[i]);go(i+1);cur.pop()}}go(0);return res}
+function getVariablePart(g){return g.filter(n=>!baseSet.has(n))}
+function coverage(all){let others=remaining(),t=Math.min(4,countNeeded()),total=C(others.length,t),seen=new Set();for(let g of all)for(let k of tupleKeys(getVariablePart(g),t))seen.add(k);return {found:seen.size,total,percent:total?100*seen.size/total:0,t}}
+function reduceGreedy(candidates,limit){
+ // Couverture incrémentale : rapide même pour 15 numéros sur téléphone.
+ let t=Math.min(4,countNeeded()),records=candidates.map(g=>({g,keys:tupleKeys(getVariablePart(g),t)}));
+ let index=new Map(),scores=new Int32Array(records.length),done=new Uint8Array(records.length),covered=new Set(),res=[];
+ records.forEach((r,i)=>{scores[i]=r.keys.length;for(let key of r.keys){if(!index.has(key))index.set(key,[]);index.get(key).push(i)}});
+ while(res.length<limit){let best=-1,score=0;for(let i=0;i<records.length;i++)if(!done[i]&&scores[i]>score){best=i;score=scores[i]}
+ if(best<0)break;done[best]=1;res.push(records[best].g);
+ for(let key of records[best].keys){if(covered.has(key))continue;covered.add(key);for(let i of index.get(key))if(!done[i])scores[i]--}
+ }
+ return res;
+}
+function rotateBalanced(candidates,limit){let pool=candidates.slice(),uses=new Map(),result=[];while(result.length<limit&&pool.length){let pick=-1,best=Infinity;for(let i=0;i<pool.length;i++){let variable=getVariablePart(pool[i]),score=variable.reduce((v,n)=>v+(uses.get(n)||0),0);if(score<best){best=score;pick=i}}let g=pool.splice(pick,1)[0];result.push(g);for(let n of getVariablePart(g))uses.set(n,(uses.get(n)||0)+1)}return result}
+function update(){buildNums();buildBasePicker();$('baseCount').value=String(baseCount);let n=selected.size,fixes=baseSet.size,need=countNeeded(),pool=remaining().length,ready=fixes===baseCount&&pool>=need;$('count').textContent=n+' / 7';$('range').textContent=n<7?'Encore '+(7-n)+' numéro(s) pour une grille.':n===7?'Une sélection de 7 numéros.':n+' numéros sélectionnés pour créer des combinaisons.';$('totalComb').textContent=ready?C(pool,need).toLocaleString('fr-FR'):'—';$('baseSummary').innerHTML=baseCount?'<strong>'+fixes+' / '+baseCount+' bases choisies</strong> · '+need+' complément(s) par grille · '+pool+' numéro(s) complémentaires disponibles.'+(ready?' <strong>'+C(pool,need).toLocaleString('fr-FR')+' combinaison(s) théorique(s).</strong>':' <strong>Complète tes bases et ta sélection.</strong>'):'<strong>Sans base fixe</strong> · 7 numéros complémentaires par grille.';$('maxWrap').style.display=$('mode').value==='full'?'none':'flex';opts('stakes',[2,4,6,8],stake,v=>{stake=v},'Mise par grille et par tirage');opts('draws',[1,2],draws,v=>{draws=v},'Nombre de tirages');$('bCount').textContent=grids.length||1;$('cost').textContent=((grids.length||1)*stake*draws).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});persist()}
+function tokens(a){return '<div class="tokens">'+a.map(n=>'<span class="tok'+(baseSet.has(n)?' baseTok':'')+'" title="'+(baseSet.has(n)?'Base fixe':'Numéro complémentaire')+'">'+n+'</span>').join('')+'</div>'}
+function renderGridList(){
+ let count=grids.length,pages=Math.max(1,Math.ceil(count/pageSize));listPage=Math.max(0,Math.min(listPage,pages-1));
+ let visible=grids.slice(listPage*pageSize,(listPage+1)*pageSize);
+ $('grids').innerHTML=visible.map((a,i)=>'<div class="gridline"><strong>N° '+(listPage*pageSize+i+1)+'</strong>'+tokens(a)+'</div>').join('');
+ $('pagerInfo').textContent=(listPage+1)+' / '+pages;
+ $('listPrev').disabled=listPage===0;$('listNext').disabled=listPage===pages-1;
+ $('pageSizeNote').textContent=count>pageSize?'Affichage de '+(listPage*pageSize+1)+' à '+Math.min((listPage+1)*pageSize,count)+' sur '+count+' grilles. Le fichier CSV contient toutes les grilles.':'';
+}
+$('listPrev').onclick=()=>{listPage--;renderGridList()};
+$('listNext').onclick=()=>{listPage++;renderGridList()};
+function renderStep(){let a=grids[step];$('page').textContent=(step+1)+' / '+grids.length;$('preview').innerHTML=a?'<div class="gridline" style="border:0;justify-content:center">'+tokens(a)+'</div><p class="small" style="text-align:center">Numéros dorés = bases fixes. Reporte ces 7 numéros sur une grille du bulletin FDJ.</p>':'';$('prev').disabled=step===0;$('next').disabled=step===grids.length-1}
+$('generate').onclick=()=>{let nums=remaining(),fixes=[...baseSet].sort((a,b)=>a-b),need=countNeeded();if(fixes.length!==baseCount){$('status').textContent='Choisis exactement '+baseCount+' base(s) fixe(s) dans la grille dorée.';$('status').className='status err';return}if(nums.length<need){$('status').textContent='Il te faut encore '+(need-nums.length)+' numéro(s) complémentaire(s) pour former une grille de 7.';$('status').className='status err';return}let all=generateAll(nums,fixes);if(!all.length){$('status').className='status err';$('status').textContent='Aucune combinaison ne respecte ces conditions. Modifie les filtres.';invalidate();update();return}let mode=$('mode').value,limit=Math.max(1,Math.min(500,Number($('max').value)||20));grids=mode==='reduced'?reduceGreedy(all,limit):mode==='rotation'?rotateBalanced(all,limit):all;step=0;let cv=coverage(grids);$('status').className='status ok';$('status').textContent=grids.length+' grille(s) générée(s) sur '+all.length+' combinaison(s) respectant les conditions, avec '+baseCount+' base(s) fixe(s).';$('results').style.display='block';$('guided').style.display='block';$('summary').textContent=grids.length+' grilles';$('coverage').innerHTML='Couverture des associations de '+cv.t+' numéro(s) complémentaires : <strong>'+cv.found+' / '+cv.total+' ('+cv.percent.toFixed(1).replace('.',',')+' %)</strong>.<br><span class="small">Les numéros fixes sont inclus dans toutes les grilles. Cet indicateur mesure uniquement les associations de numéros complémentaires, et non une chance de gain. Les filtres peuvent exclure certaines associations.</span>';listPage=0;renderGridList();$('export').disabled=false;$('print').disabled=false;renderStep();update();$('results').scrollIntoView({behavior:'smooth',block:'start'})};
+$('baseCount').onchange=()=>{baseCount=Number($('baseCount').value);while(baseSet.size>baseCount)baseSet.delete([...baseSet].at(-1));invalidate();update()};
+$('mode').onchange=()=>{invalidate();update()};$('odd').onchange=invalidate;$('consec').onchange=invalidate;$('max').onchange=invalidate;
+document.querySelectorAll('.suggestion').forEach(b=>b.onclick=()=>{$('mode').value=b.dataset.mode;if(b.dataset.size)$('max').value=b.dataset.size;invalidate();update();$('status').className='status';$('status').textContent='Système '+b.textContent+' sélectionné. Clique sur « Développer mon système ».'});
+$('clear').onclick=()=>{selected.clear();baseSet.clear();invalidate();update()};
+$('random').onclick=()=>{let required=[...baseSet],a=Array.from({length:28},(_,i)=>i+1).filter(n=>!baseSet.has(n));for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}selected=new Set([...required,...a.slice(0,7-required.length)]);invalidate();update()};
+$('save').onclick=()=>{persist();$('status').textContent='Sélection et bases enregistrées sur cet appareil.';$('status').className='status ok'};
+$('prev').onclick=()=>{step=Math.max(0,step-1);renderStep()};$('next').onclick=()=>{step=Math.min(grids.length-1,step+1);renderStep()};$('print').onclick=()=>window.print();
+$('export').onclick=()=>{if(!grids.length)return;let rows=['Grille;N1;N2;N3;N4;N5;N6;N7',...grids.map((g,i)=>[i+1,...g].join(';'))];let blob=new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='AMIGO-SYSTEME-PRO-grilles.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+function buildWin(){let wrap=$('win');wrap.innerHTML='';for(let n=1;n<=28;n++){let b=document.createElement('button');b.textContent=n;b.className='winnum '+(drawColors.get(n)||'');b.title='Numéro '+n;b.setAttribute('aria-label','Numéro du tirage '+n+' '+(drawColors.get(n)||'non sélectionné'));b.onclick=()=>{let c=drawColors.get(n);if(c==='blue')drawColors.set(n,'yellow');else if(c==='yellow')drawColors.delete(n);else drawColors.set(n,'blue');buildWin()};wrap.append(b)}}
+$('resetWin').onclick=()=>{drawColors.clear();buildWin();$('winResult').textContent='Aucun tirage saisi.'};
+$('checkWin').onclick=()=>{let blues=new Set([...drawColors].filter(([n,c])=>c==='blue').map(([n])=>n)),yellows=new Set([...drawColors].filter(([n,c])=>c==='yellow').map(([n])=>n));if(blues.size!==7||yellows.size!==5){$('winResult').className='status err';$('winResult').textContent='Il faut sélectionner exactement 7 numéros bleus et 5 numéros jaunes. Actuellement : '+blues.size+' bleus, '+yellows.size+' jaunes.';return}if(!grids.length){$('winResult').textContent='Développe d’abord un système pour vérifier ses grilles.';return}let stats=new Map();for(let g of grids){let b=g.filter(x=>blues.has(x)).length,y=g.filter(x=>yellows.has(x)).length,k=b+' bleu(s) + '+y+' jaune(s)';stats.set(k,(stats.get(k)||0)+1)}$('winResult').className='status ok';$('winResult').innerHTML='<strong>Répartition des '+grids.length+' grilles :</strong><br>'+Array.from(stats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>v+' grille(s) : '+k).join('<br>')+'<br><small>Résultat descriptif, sans calcul de gains financiers.</small>'};
+buildWin();update();})();
+</script>
+
+<script>
+(()=>{'use strict';
+const sectionNames=['bulletin','systems','grids','draw'];
+let active='bulletin';
+function hasGrids(){return document.getElementById('results').style.display!=='none'}
+function view(name){
+ if(!sectionNames.includes(name))return;
+ active=name;
+ document.querySelectorAll('[data-mobile-section]').forEach(el=>{
+  const show=(el.dataset.mobileSection===name) && (name!=='grids'||(hasGrids()?el.id==='results':el.id==='mobile-empty'));
+  el.classList.toggle('mobile-active',show);
+ });
+ document.querySelectorAll('[data-go]').forEach(b=>{let on=b.dataset.go===name;b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+ if(window.innerWidth<=760)window.scrollTo({top:0,behavior:'instant'});
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.go)));
+document.getElementById('goSystems').addEventListener('click',()=>view('systems'));
+document.getElementById('generate').addEventListener('click',()=>{
+ if(hasGrids() && window.innerWidth<=760) view('grids');else if(active==='grids')view('grids');
+});
+['clear','random','baseCount','mode','odd','consec'].forEach(id=>{
+ const el=document.getElementById(id);
+ el.addEventListener('click',()=>{if(active==='grids')view('grids')});
+ el.addEventListener('change',()=>{if(active==='grids')view('grids')});
+});
+window.addEventListener('resize',()=>{if(window.innerWidth<=760)view(active)});
+view(active);
+const installBtn=document.getElementById('installPwa');
+if(installBtn){
+ let pending;
+ window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();pending=event;installBtn.hidden=false});
+ installBtn.addEventListener('click',async()=>{if(!pending)return;pending.prompt();await pending.userChoice;pending=null;installBtn.hidden=true});
+ window.addEventListener('appinstalled',()=>{installBtn.hidden=true;pending=null});
+}
 })();
+</script>
+<script>
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
 </script></body></html>
