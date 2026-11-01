@@ -1,0 +1,18 @@
+{
+  "name": "AMIGO SYSTÈME PRO",
+  "short_name": "AMIGO PRO",
+  "description": "Bulletin et systèmes Amigo interactifs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#edf1f8",
+  "theme_color": "#10234e",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
