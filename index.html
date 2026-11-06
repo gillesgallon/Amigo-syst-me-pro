@@ -98,8 +98,10 @@ header .head-text{min-width:0}
 }
 @media print{#mobile-nav,#mobile-install,#listPager,#mobile-empty{display:none!important}.panel[data-mobile-section]{display:block!important}}
 </style>
-<link rel="manifest" href="manifest.webmanifest"></head>
-<body>
+<link rel="manifest" href="manifest.webmanifest"><meta name="nova-build" content="2026-11-06-amigo-sync">
+<style id="nova-amigo-sync">#nova-amigo-banner{width:100%;background:#10243c}#nova-amigo-banner img{display:block;width:100%;height:auto;max-height:260px;object-fit:contain;margin:auto}.win-num{grid-template-columns:repeat(7,26px)!important;gap:5px!important;justify-content:start}.winnum{width:26px!important;height:26px!important;min-width:26px!important;min-height:26px!important;padding:0!important;font-size:12px!important;line-height:1!important;aspect-ratio:1}</style>
+</head>
+<body><div id="nova-amigo-banner"><img src="./bandeau-amigo.webp" alt="AMIGO SYSTÈME PRO — Boules bleues et jaunes" fetchpriority="high"></div>
 <header><img class="app-symbol" src="icon.svg" alt="Icône AMIGO SYSTÈME PRO"><div class="head-text"><h1>AMIGO SYSTÈME PRO</h1><p>Mon bulletin · bases fixes · combinaisons · saisie guidée</p></div></header>
 <main>
 <section class="panel mobile-active" data-mobile-section="bulletin">
@@ -251,6 +253,6 @@ if(installBtn){
 </script>
 <script>
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
- window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{reg.update();return reg;}).catch(()=>{}));
 }
 </script></body></html>
