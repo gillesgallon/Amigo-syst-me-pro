@@ -1,6 +1,6 @@
 'use strict';
 // À chaque ouverture : version en ligne, copie hors connexion en secours.
-const CACHE='nova-amigo-mobile-20261106-sauvegarde6';
+const CACHE='nova-amigo-mobile-20261106-liaison7';
 const OWN_PREFIXES=['nova-amigo-mobile-','amigo-systeme-pro-mobile-'];
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./bandeau-amigo.webp'];
 self.addEventListener('install',event=>event.waitUntil(
