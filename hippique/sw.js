@@ -1,8 +1,8 @@
 'use strict';
 // À chaque ouverture : version en ligne, copie hors connexion en secours.
-const CACHE='nova-hippique-mobile-20261106';
+const CACHE='nova-hippique-mobile-20261106-logo2';
 const OWN_PREFIXES=['nova-hippique-mobile-','hippique-systeme-pro-'];
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg'];
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./hippique-logo-192.png','./hippique-logo-512.png'];
 self.addEventListener('install',event=>event.waitUntil(
  caches.open(CACHE).then(async cache=>{
   for(const path of ASSETS){
